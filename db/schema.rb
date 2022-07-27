@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_27_191415) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_27_222326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,4 +39,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_27_191415) do
 
   add_foreign_key "transactions", "accounts", column: "recipient_account_id"
   add_foreign_key "transactions", "accounts", column: "sender_account_id"
+
+  create_view "user_transactions", materialized: true, sql_definition: <<-SQL
+      SELECT sender.name,
+      sender.email,
+      sender.id AS user_id,
+      transactions.amount,
+      recipient.name AS recipient_name
+     FROM ((users sender
+       JOIN transactions ON ((transactions.sender_account_id = sender.id)))
+       JOIN users recipient ON ((transactions.recipient_account_id = recipient.id)));
+  SQL
 end
