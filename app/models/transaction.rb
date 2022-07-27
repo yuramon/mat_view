@@ -2,14 +2,19 @@ class Transaction < ApplicationRecord
   belongs_to :sender_account, class_name: 'Account'
   belongs_to :recipient_account, class_name: 'Account'
 
+  validate :sender_not_equal_to_recipient
   after_create :update_balances
 
   private
 
   def update_balances
-    ActiveRecord::Base.transaction do
-      self.sender_account.update!(balance: self.sender_account.balance - amount)
-      self.recipient_account.update!(balance: self.recipient_account.balance + amount)
+    sender_account.update!(balance: sender_account.balance - amount)
+    recipient_account.update!(balance: recipient_account.balance + amount)
+  end
+
+  def sender_not_equal_to_recipient
+    if sender_account.id == recipient_account.id
+      errors.add("Recipient account can't be equal to sender account")
     end
   end
 end
