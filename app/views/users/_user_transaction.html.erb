@@ -1,0 +1,31 @@
+<div class="container">
+
+  <hr>
+
+  <%unless @user %>
+    <p>
+      <strong>Name:</strong>
+      <%= user_transaction.name %>
+    </p>
+
+    <p>
+      <strong>Email:</strong>
+      <%= user_transaction.email %>
+    </p>
+  <%end %>
+
+  <p>
+    <strong>Transaction Number:</strong>
+    <%= transaction_number %>
+  </p>
+
+  <p>
+    <strong>Amount:</strong>
+    <%= user_transaction.amount %>
+  </p>
+
+  <p>
+    <strong>Recipient name:</strong>
+    <%= user_transaction.recipient_name %>
+  </p>
+</div>

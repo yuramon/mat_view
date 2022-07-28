@@ -10,11 +10,12 @@ class Transaction < ApplicationRecord
   def update_balances
     sender_account.update!(balance: sender_account.balance - amount)
     recipient_account.update!(balance: recipient_account.balance + amount)
+    Scenic.database.refresh_materialized_view('user_transactions', concurrently: false, cascade: false)
   end
 
   def sender_not_equal_to_recipient
     if sender_account.id == recipient_account.id
-      errors.add("Recipient account can't be equal to sender account")
+      errors.add(:recipient_account, "can't be equal to sender account")
     end
   end
 end

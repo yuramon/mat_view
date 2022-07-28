@@ -2,6 +2,10 @@
 
 <%= render @user %>
 
+<% @user.user_transactions.each_with_index do |user_transaction, i| %>
+  <%= render partial: "user_transaction", locals: { user_transaction: user_transaction , transaction_number: i+1} %>
+<% end %>
+
 <div>
   <%= link_to "Edit this user", edit_user_path(@user) %> |
   <%= link_to "Back to users", users_path %>
